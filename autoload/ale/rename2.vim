@@ -109,7 +109,7 @@ function! s:GetOptions() abort
 endfunction
 
 function! ale#rename2#Execute() abort
-    call ale#lsp_helper#Send({
+    call ale#lsp_util#Send({
     \   'command': 'rename',
     \   'GetOptions': function('s:GetOptions'),
     \   'tsserver': {

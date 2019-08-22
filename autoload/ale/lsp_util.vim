@@ -4,16 +4,16 @@
 let s:request_map = {}
 
 " Used to get the lsp_helper map in tests.
-function! ale#lsp_helper#GetMap() abort
+function! ale#lsp_util#GetMap() abort
     return deepcopy(s:lsp_helper_map)
 endfunction
 
 " Used to set the lsp_helper map in tests.
-function! ale#lsp_helper#SetMap(map) abort
+function! ale#lsp_util#SetMap(map) abort
     let s:lsp_helper_map = a:map
 endfunction
 
-function! ale#lsp_helper#ClearLSPData() abort
+function! ale#lsp_util#ClearLSPData() abort
     let s:lsp_helper_map = {}
 endfunction
 
@@ -21,7 +21,7 @@ function! s:message(message) abort
     call ale#util#Execute('echom ' . string(a:message))
 endfunction
 
-function! ale#lsp_helper#HandleTSServerResponse(conn_id, response) abort
+function! ale#lsp_util#HandleTSServerResponse(conn_id, response) abort
     if !has_key(a:response, 'request_seq')
         return
     endif
@@ -43,7 +43,7 @@ function! ale#lsp_helper#HandleTSServerResponse(conn_id, response) abort
     call l:params.tsserver.HandleResponse(l:params, a:response)
 endfunction
 
-function! ale#lsp_helper#HandleLSPResponse(conn_id, response) abort
+function! ale#lsp_util#HandleLSPResponse(conn_id, response) abort
     if !has_key(a:response, 'id')
         return
     endif
@@ -67,12 +67,13 @@ function! s:OnReady(params, linter, lsp_details) abort
     let l:buffer = a:lsp_details.buffer
 
     let l:Callback = a:linter.lsp is# 'tsserver'
-    \   ? function('ale#lsp_helper#HandleTSServerResponse')
-    \   : function('ale#lsp_helper#HandleLSPResponse')
+    \   ? function('ale#lsp_util#HandleTSServerResponse')
+    \   : function('ale#lsp_util#HandleLSPResponse')
 
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
     let l:message = {}
+
     if a:linter.lsp is# 'tsserver'
         if has_key(a:params, 'tsserver')
             let l:message = a:params.tsserver.GetMessage(a:params)
@@ -83,15 +84,13 @@ function! s:OnReady(params, linter, lsp_details) abort
         endif
     endif
 
-    echom string(l:message)
-
     if !empty(l:message)
         let l:request_id = ale#lsp#Send(l:id, l:message)
         let s:request_map[l:request_id] = a:params
     endif
 endfunction
 
-function s:Execute(linter, params) abort
+function! s:Execute(linter, params) abort
     let l:Callback = function('s:OnReady', [a:params])
     call ale#lsp_linter#StartLSP(a:params.buffer, a:linter, l:Callback)
 endfunction
@@ -105,7 +104,7 @@ endfunction
 "  - [tsserver]
 "    - GetMessage(params)
 "    - HandleRequest(params)
-function! ale#lsp_helper#Send(params) abort
+function! ale#lsp_util#Send(params) abort
     let l:lsp_linters = []
 
     for l:linter in ale#linter#Get(&filetype)
@@ -129,6 +128,7 @@ function! ale#lsp_helper#Send(params) abort
         \ ? a:params.GetOptions() : {}
     catch
         call s:message(v:exception)
+
         return
     endtry
 
