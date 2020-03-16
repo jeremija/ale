@@ -194,6 +194,7 @@ Notes:
 * HTML
   * `alex`!!
   * `fecs`
+  * `html-beautify`
   * `HTMLHint`
   * `prettier`
   * `proselint`
@@ -283,6 +284,7 @@ Notes:
 * Nim
   * `nim check`!!
   * `nimlsp`
+  * `nimpretty`
 * nix
   * `nix-instantiate`
   * `nixpkgs-fmt`
@@ -348,6 +350,7 @@ Notes:
   * `puppet-lint`
 * PureScript
   * `purescript-language-server`
+  * `purty`
 * Python
   * `autopep8`
   * `bandit`
@@ -466,6 +469,7 @@ Notes:
   * `eslint`
   * `fecs`
   * `prettier`
+  * `standard`
   * `tslint`
   * `tsserver`
   * `typecheck`
