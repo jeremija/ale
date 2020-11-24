@@ -528,6 +528,7 @@ function! ale#completion#ParseLSPCompletions(response) abort
         \   'kind': ale#completion#GetCompletionSymbols(get(l:item, 'kind', '')),
         \   'icase': 1,
         \   'menu': get(l:item, 'detail', ''),
+        \   'dup': g:ale_completion_tsserver_autoimport,
         \   'info': (type(l:doc) is v:t_string ? l:doc : ''),
         \}
 
