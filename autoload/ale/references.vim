@@ -31,8 +31,6 @@ function! ale#references#HandleTSServerResponse(conn_id, response) abort
                 \})
             endfor
 
-            call sort(l:item_list)
-
             if empty(l:item_list)
                 call ale#util#Execute('echom ''No references found.''')
             else
@@ -60,6 +58,8 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
                 \})
             endfor
         endif
+
+        call sort(l:item_list)
 
         if empty(l:item_list)
             call ale#util#Execute('echom ''No references found.''')
